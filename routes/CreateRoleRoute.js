@@ -4,7 +4,7 @@ const {
     createNewRole,
     getAllRole,
     getRoleById,
-    updateRoleStatus,
+    getRoleByName,
     updateRole,
     deleteRole
 } = require('../controllers/CreateRoleController');
@@ -12,7 +12,7 @@ const {
 router.post('/role', createNewRole);
 router.get('/role', getAllRole);
 router.get('/role/:id', getRoleById);
-router.put('/role/status', updateRoleStatus);
+router.get('/role/name/:role', getRoleByName);
 router.put('/role', updateRole);
 router.delete('/role/:id', deleteRole);
 

@@ -6,7 +6,7 @@ const ObjectId = require('mongoose/lib/schema/objectid');
 const UserSchema = new Schema({
     profile_img: {
         type: String,
-        default: "https://adventure-store.s3.amazonaws.com/photos/dummy_user.png"
+        default: "https://demo-bucket.fra1.digitaloceanspaces.com/dummy_user.png"
     },
     first_name: {
         type: String,

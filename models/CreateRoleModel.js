@@ -7,12 +7,14 @@ const CreareRole = new Schema({
     role: {
         type: String
     },
-    is_active: {
+    read: {
         type: Boolean
     },
-    modified_by: {
-        type: ObjectId,
-        ref: "User"
+    write: {
+        type: Boolean
+    },
+    create: {
+        type: Boolean
     }
 }, {
     timestamps: true,

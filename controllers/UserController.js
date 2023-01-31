@@ -1,5 +1,7 @@
 const { UserModel } = require("../models/UserModel");
 const { VerifyOtpModel } = require("../models/VerifyOtpModel");
+const { CreateRoleModel } = require('../models/CreateRoleModel')
+const { PermissionModel } = require('../models/PermissionModel')
 
 const error = require("../config/errors").errors;
 const helpers = require("../helpers/validations")
@@ -42,10 +44,8 @@ const createUser = async (req, res) => {
 
             try {
                 let User = await obj.save();
-                // await signupEmail(User)
                 await VerifyOtpModel.deleteMany({ email: email, type: "signUp" });
                 let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img, User.role)
-                // return res.send({ token: token });
                 let newImg = `https://adventure-store.s3.amazonaws.com/users/${User._id}.png`
                 let response = await UserModel.findOneAndUpdate({ _id: User._id }, { $set: { profile_img: newImg } }, { new: true });
                 return res.status(201).send({ status_code: 200, message: "SignUp SuccessFully", token: token, userId: User._id })
@@ -95,6 +95,25 @@ const getUserByEmail = async (req, res) => {
         res.status(400).send({ error })
     }
 }
+const getUserByRole = async (req, res) => {
+    const { id } = req.params
+    try {
+        let data = await CreateRoleModel.findById({ _id: id })
+        res.status(200).send({ status: 200, message: "OK", data })
+    } catch (error) {
+        res.status(400).send({ error })
+    }
+}
+
+const getUserByPermission = async (req, res) => {
+    const { id } = req.params
+    try {
+        let data = await PermissionModel.findById({ _id: id })
+        res.status(200).send({ status: 200, message: "OK", data })
+    } catch (error) {
+        res.status(400).send({ error })
+    }
+}
 
 const updateUser = async (req, res) => {
 
@@ -129,6 +148,8 @@ module.exports = {
     createUser,
     getUser,
     getUserById,
+    getUserByRole,
+    getUserByPermission,
     getUserByEmail,
     updateUser,
     deleteUser
