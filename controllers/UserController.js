@@ -6,59 +6,107 @@ const { PermissionModel } = require('../models/PermissionModel')
 const error = require("../config/errors").errors;
 const helpers = require("../helpers/validations")
 
+// const createUser = async (req, res) => {
+//     let {
+//         username,
+//         fullName,
+//         email,
+//         password,
+//         role,
+//         ability,
+//         otp
+//     } = req.body
+
+//     let otpData = await VerifyOtpModel.findOne({ email: req.body.email, type: "signUp" });
+//     console.log(otpData);
+
+//     let currentDate = new Date();
+//     let otpDataTime = new Date(otpData.time)
+
+//     if (otpData.otp !== otp) return res.status(400).send({ error: error.VERIFICATION_FAILURE })
+//     if (otpDataTime > currentDate) {
+//         if (helpers.isValidEmail(email)) {
+//             email = email.toLowerCase();
+//             const existingUser = await UserModel.findOne({ email: email });
+//             if (existingUser) {
+//                 return res.status(400).send({ errorCode: error.EMAIL_ID_USERNAME_ALREADY_EXITS.code, error: error.EMAIL_ID_USERNAME_ALREADY_EXITS });
+//             }
+
+//             const obj = new UserModel({
+//                 email,
+//                 password: helpers.hashPassword(password),
+//                 signup_token: new Date().getTime(),
+//                 is_confirmed: true,
+//                 is_active: true,
+//                 role,
+//                 username,
+//                 ability,
+//                 fullName
+//             });
+
+//             try {
+//                 let User = await obj.save();
+//                 await VerifyOtpModel.deleteMany({ email: email, type: "signUp" });
+//                 let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img, User.role)
+//                 // let newImg = `https://adventure-store.s3.amazonaws.com/users/${User._id}.png`
+//                 // let response = await UserModel.findOneAndUpdate({ _id: User._id }, { $set: { profile_img: newImg } }, { new: true });
+//                 return res.status(201).send({ status_code: 200, message: "SignUp SuccessFully", token: token, userId: User._id })
+//             } catch (error) {
+//                 res.status(400).send({ status_code: 400, message: "Error", error })
+//             }
+
+//         } else {
+//             return res.status(400).send({ error: error.INVALID_EMAIL });
+//         }
+
+//     } else {
+//         return res.status(400).send({ error: error.OTP_EXPIRED });
+//     }
+// }
+
 const createUser = async (req, res) => {
     let {
-        first_name,
-        last_name,
+        username,
+        fullName,
         email,
         password,
         role,
-        otp
+        ability,
+        status,
+        contact
     } = req.body
 
-    let otpData = await VerifyOtpModel.findOne({ email: req.body.email, type: "signUp" });
-    console.log(otpData);
+    if (helpers.isValidEmail(email)) {
+        email = email.toLowerCase();
+        const existingUser = await UserModel.findOne({ email: email });
+        if (existingUser) {
+            return res.status(400).send({ errorCode: error.EMAIL_ID_USERNAME_ALREADY_EXITS.code, error: error.EMAIL_ID_USERNAME_ALREADY_EXITS });
+        }
 
-    let currentDate = new Date();
-    let otpDataTime = new Date(otpData.time)
+        const obj = new UserModel({
+            email,
+            password: helpers.hashPassword(password),
+            signup_token: new Date().getTime(),
+            is_confirmed: true,
+            is_active: true,
+            role,
+            username,
+            fullName,
+            ability,
+            status,
+            contact
+        });
 
-    if (otpData.otp !== otp) return res.status(400).send({ error: error.VERIFICATION_FAILURE })
-    if (otpDataTime > currentDate) {
-        if (helpers.isValidEmail(email)) {
-            email = email.toLowerCase();
-            const existingUser = await UserModel.findOne({ email: email });
-            if (existingUser) {
-                return res.status(400).send({ errorCode: error.EMAIL_ID_USERNAME_ALREADY_EXITS.code, error: error.EMAIL_ID_USERNAME_ALREADY_EXITS });
-            }
-
-            const obj = new UserModel({
-                email,
-                password: helpers.hashPassword(password),
-                signup_token: new Date().getTime(),
-                is_confirmed: true,
-                is_active: true,
-                role,
-                first_name,
-                last_name
-            });
-
-            try {
-                let User = await obj.save();
-                await VerifyOtpModel.deleteMany({ email: email, type: "signUp" });
-                let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img, User.role)
-                let newImg = `https://adventure-store.s3.amazonaws.com/users/${User._id}.png`
-                let response = await UserModel.findOneAndUpdate({ _id: User._id }, { $set: { profile_img: newImg } }, { new: true });
-                return res.status(201).send({ status_code: 200, message: "SignUp SuccessFully", token: token, userId: User._id })
-            } catch (error) {
-                res.status(400).send({ status_code: 400, message: "Error", error })
-            }
-
-        } else {
-            return res.status(400).send({ error: error.INVALID_EMAIL });
+        try {
+            let User = await obj.save();
+            let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img, User.role)
+            return res.status(201).send({ status_code: 200, message: "SignUp SuccessFully", token: token, userId: User._id })
+        } catch (error) {
+            res.status(400).send({ status_code: 400, message: "Error", error })
         }
 
     } else {
-        return res.status(400).send({ error: error.OTP_EXPIRED });
+        return res.status(400).send({ error: error.INVALID_EMAIL });
     }
 }
 

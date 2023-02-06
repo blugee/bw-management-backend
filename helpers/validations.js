@@ -40,20 +40,22 @@ const encryptLinkData = async (data) => {
 const generateUserToken = (
     _id,
     email,
-    first_name,
-    last_name,
+    fullName,
+    username,
     is_active,
-    profile_img,
-    role
+    avatar,
+    role,
+    ability
 ) => {
     const token = jwt.sign({
         _id,
         email,
-        first_name,
-        last_name,
+        fullName,
+        username,
         is_active,
-        profile_img,
-        role
+        avatar,
+        role,
+        ability
     },
         process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24, issuer: process.env.JWT_ISSUER },
     );

@@ -4,15 +4,15 @@ const { Schema } = mongoose
 const ObjectId = require('mongoose/lib/schema/objectid');
 
 const UserSchema = new Schema({
-    profile_img: {
+    avatar: {
         type: String,
         default: "https://demo-bucket.fra1.digitaloceanspaces.com/dummy_user.png"
     },
-    first_name: {
+    username: {
         type: String,
         default: ""
     },
-    last_name: {
+    fullName: {
         type: String,
         default: ""
     },
@@ -22,7 +22,7 @@ const UserSchema = new Schema({
     password: {
         type: String
     },
-    phone_number: {
+    contact: {
         type: String
     },
     age: {
@@ -57,6 +57,13 @@ const UserSchema = new Schema({
     },
     role: {
         type: String
+    },
+    ability: {
+        type: Object
+    },
+    status: {
+        type: String,
+        default: 'pending'
     },
     modified_by: {
         type: ObjectId,

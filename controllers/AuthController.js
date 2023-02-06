@@ -19,8 +19,8 @@ const loginUser = async (req, res) => {
         if (!helpers.comparePassword(User.password, req.body.password)) {
             return res.status(400).send({ message: "Password is Incorrect ", error: error.INVALID_CREDENTIAL });
         }
-        let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img,User.role)
-        return res.status(200).send({ message: "Login Successfully", token: token, is_firstTime: false });
+        let token = helpers.generateUserToken(User._id, User.email, User.username, User.fullName, User.is_active, User.avatar, User.role, User.ability)
+        return res.status(200).send({ status: 200, message: "Login Successfully", token: token, is_firstTime: false });
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error: error.message })
     }

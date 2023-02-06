@@ -18,8 +18,8 @@ const connectDB = () => {
                         is_confirmed: true,
                         is_active: true,
                         role: "ADMIN",
-                        first_name: "shreehariji",
-                        last_name: "test",
+                        username: "shreehariji",
+                        fullName: "test",
                         phone_number: "9876543210",
                         age: "22",
                         address: "surat",
@@ -28,6 +28,12 @@ const connectDB = () => {
                         gender: "Male",
                         health_status: "Good",
                         marital_status: "Un-Married",
+                        ability: [
+                            {
+                                action: 'manage',
+                                subject: 'all'
+                            }
+                        ]
                     }, (e, adminData) => {
                         console.log(`Admin User Created Successfully with Email "mailto:shreehariji.test@gmail.com" And id ${adminData._id}`);
                     })

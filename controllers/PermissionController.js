@@ -4,10 +4,12 @@ const error = require("../config/errors").errors;
 const createPermission = async (req, res) => {
     const {
         permission_name,
+        assign_by
     } = req.body
 
     let obj = new PermissionModel({
-        permission_name
+        permission_name,
+        assign_by
     })
 
     try {
@@ -20,7 +22,7 @@ const createPermission = async (req, res) => {
 
 const getAllPermission = async (req, res) => {
     try {
-        let data = await PermissionModel.find()
+        let data = await PermissionModel.find().populate([{ path: 'assign_by', model: 'User', select: ['profile_img', 'first_name', 'last_name'] }])
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })
@@ -30,7 +32,7 @@ const getAllPermission = async (req, res) => {
 const getPermissionById = async (req, res) => {
     const { id } = req.params
     try {
-        let data = await PermissionModel.findById(id)
+        let data = await PermissionModel.findById(id).populate([{ path: 'assign_by', model: 'User', select: ['profile_img', 'first_name', 'last_name'] }])
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })
@@ -40,7 +42,7 @@ const getPermissionById = async (req, res) => {
 const getPermissionByName = async (req, res) => {
     const { permission } = req.params
     try {
-        let data = await PermissionModel.find({ permission_name: { $regex: new RegExp("^" + permission.toLowerCase(), "i") } })
+        let data = await PermissionModel.find({ permission_name: { $regex: new RegExp("^" + permission.toLowerCase(), "i") } }).populate([{ path: 'assign_by', model: 'User', select: ['profile_img', 'first_name', 'last_name'] }])
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })
