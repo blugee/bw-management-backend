@@ -112,8 +112,8 @@ const createUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        let User = await UserModel.find().select(['-password', '-health_status', '-signup_token'])
-        User = User.filter((item) => item.role === 'USER')
+        let User = await UserModel.find().select(['-password', '-health_status', '-signup_token']).sort({ createdAt: -1 })
+        User = User.filter((item) => item.role !== 'ADMIN')
         res.status(200).send({ User })
     } catch (error) {
         res.status(400).send({ error })
