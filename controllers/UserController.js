@@ -100,7 +100,7 @@ const createUser = async (req, res) => {
         try {
             let User = await obj.save();
             let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img, User.role)
-            return res.status(201).send({ status_code: 200, message: "SignUp SuccessFully", token: token, userId: User._id })
+            return res.status(201).send({ status_code: 200, message: "User Create SuccessFully", token: token, userId: User._id })
         } catch (error) {
             res.status(400).send({ status_code: 400, message: "Error", error })
         }
@@ -112,9 +112,10 @@ const createUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
+        let totalUser = await UserModel.count()
         let User = await UserModel.find().select(['-password', '-health_status', '-signup_token']).sort({ createdAt: -1 })
         User = User.filter((item) => item.role !== 'ADMIN')
-        res.status(200).send({ User })
+        res.status(200).send({ total: totalUser, User })
     } catch (error) {
         res.status(400).send({ error })
     }
