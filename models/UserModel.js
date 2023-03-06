@@ -55,6 +55,10 @@ const UserSchema = new Schema({
     is_active: {
         type: Boolean
     },
+    size: {
+        type: String,
+        default: 'sm'
+    },
     role: {
         type: String
     },
