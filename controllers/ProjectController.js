@@ -3,22 +3,25 @@ const error = require("../config/errors").errors;
 
 const createNewProject = async (req, res) => {
     const {
-        project_name,
-        users,
-        totalUsers,
-        is_active
+        general,
+        budget,
+        members,
+        team
     } = req.body
 
     let obj = new ProjectModel({
-        project_name,
-        users,
-        totalUsers,
-        is_active
+        general,
+        budget,
+        members,
+        team
     })
 
     try {
 
-        let existingProject = await ProjectModel.findOne({ project_name: req.body.project_name })
+        if (!general.project_name) {
+            return res.status(204).send({ status: 204, message: "Please Provide Project Name" })
+        }
+        let existingProject = await ProjectModel.findOne({ 'general.project_name': general.project_name })
         if (!existingProject) {
             let data = await obj.save();
             // return res.status(201).send({ status_code: 201, message: "Cat Create Successfully", data })
@@ -33,9 +36,10 @@ const createNewProject = async (req, res) => {
 
 const getAllProject = async (req, res) => {
     try {
-        let data = await ProjectModel.find().populate([{ path: 'users', model: 'User', select: ['fullName', 'avatar', 'size'] }])
+        let data = await ProjectModel.find().populate([{ path: 'general.client', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.user', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.manager', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.viewer', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'team', model: 'User', select: ['fullName', 'username', 'avatar'] }])
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
+        console.log(error);
         res.status(400).send({ status_code: 400, message: "Error", error })
     }
 }
@@ -43,7 +47,7 @@ const getAllProject = async (req, res) => {
 const getProjectById = async (req, res) => {
     const { id } = req.params
     try {
-        let data = await ProjectModel.findById(id)
+        let data = await ProjectModel.findById(id).populate([{ path: 'general.client', model: 'User', select: ['fullName', 'username', 'avatar'] },{ path: 'members.user', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.manager', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.viewer', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'team', model: 'User', select: ['fullName', 'username', 'avatar'] }])
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })

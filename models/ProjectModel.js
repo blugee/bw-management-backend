@@ -4,23 +4,73 @@ const { Schema } = mongoose
 const ObjectId = require('mongoose/lib/schema/objectid');
 
 const CreareProject = new Schema({
-    project_name: {
-        type: String
-    },
-    users: [
-        {
-            type: ObjectId,
-            default: []
+    general: {
+        project_name: {
+            type: String
+        },
+        billable: {
+            type: Boolean
+        },
+        record_activity: {
+            type: Boolean
+        },
+        client: {
+            type: ObjectId
         }
-    ],
-    totalUsers: {
-        type: Number,
-        default: 0
+
     },
-    is_active: {
-        type: Boolean,
-        default: true
-    }
+    budget: {
+        base_on: {
+            type: String,
+            default: null
+        },
+        cost: {
+            type: String,
+            default: null
+        },
+        hours: {
+            type: String,
+            default: null
+        },
+        notify_at: {
+            type: String,
+            default: null
+        },
+        reset: {
+            type: String,
+            default: null
+        },
+        start_date: {
+            type: String,
+            default: null
+        },
+        type: {
+            type: String,
+            default: null
+        }
+    },
+    members: {
+        manager: [
+            {
+                type: ObjectId
+            }
+        ],
+        user: [
+            {
+                type: ObjectId
+            }
+        ],
+        viewer: [
+            {
+                type: ObjectId
+            }
+        ]
+    },
+    team: [
+        {
+            type: ObjectId
+        }
+    ]
 }, {
     timestamps: true,
     versionKey: false

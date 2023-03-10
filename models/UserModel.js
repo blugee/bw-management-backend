@@ -5,8 +5,7 @@ const ObjectId = require('mongoose/lib/schema/objectid');
 
 const UserSchema = new Schema({
     avatar: {
-        type: String,
-        default: "https://demo-bucket.fra1.digitaloceanspaces.com/dummy_user.png"
+        type: String
     },
     username: {
         type: String,

@@ -64,6 +64,22 @@ const helpers = require("../helpers/validations")
 //     }
 // }
 
+let avatar = [
+    "https://usermanagement.fra1.digitaloceanspaces.com/1.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/10.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/11.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/12.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/2.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/3.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/4.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/5.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/6.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/7.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/8.png",
+    "https://usermanagement.fra1.digitaloceanspaces.com/9.png"
+]
+const randomImage = Math.floor(Math.random() * avatar.length)
+
 const createUser = async (req, res) => {
     let {
         username,
@@ -100,6 +116,7 @@ const createUser = async (req, res) => {
         try {
             let User = await obj.save();
             let token = helpers.generateUserToken(User._id, User.email, User.first_name, User.last_name, User.is_active, User.profile_img, User.role)
+            let response = await UserModel.findOneAndUpdate({ _id: User._id }, { $set: { avatar: avatar[randomImage] } }, { new: true });
             return res.status(201).send({ status_code: 200, message: "User Create SuccessFully", token: token, userId: User._id })
         } catch (error) {
             res.status(400).send({ status_code: 400, message: "Error", error })
