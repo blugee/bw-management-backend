@@ -6,6 +6,7 @@ const CreateRoleRoute = require("./CreateRoleRoute");
 const PermissionRoute = require("./PermissionRoute");
 const UserRoute = require("./UserRoute");
 const ProjectRoute = require("./ProjectRoute");
+const CreateTaskRoute = require("./CreateTaskRoute");
 
 router.use(
     '/api',
@@ -13,7 +14,8 @@ router.use(
     CreateRoleRoute,
     PermissionRoute,
     UserRoute,
-    ProjectRoute
+    ProjectRoute,
+    CreateTaskRoute
 );
 
 module.exports = router
