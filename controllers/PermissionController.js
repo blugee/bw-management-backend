@@ -22,7 +22,7 @@ const createPermission = async (req, res) => {
 
 const getAllPermission = async (req, res) => {
     try {
-        let data = await PermissionModel.find().populate([{ path: 'assign_by', model: 'User', select: ['profile_img', 'first_name', 'last_name'] }])
+        let data = await PermissionModel.find().populate([{ path: 'assign_by', model: 'User', select: ['profile_img', 'first_name', 'last_name'] }]).sort({ createdAt: -1 })
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })

@@ -33,7 +33,7 @@ const createTask = async (req, res) => {
 const getAllTask = async (req, res) => {
 
     try {
-        let data = await CreateTaskModel.find().populate([{ path: 'assignee', model: 'User', select: ['fullName', 'username', 'avatar'] }])
+        let data = await CreateTaskModel.find().populate([{ path: 'assignee', model: 'User', select: ['fullName', 'username', 'avatar'] }]).sort({ createdAt: -1 })
         res.status(200).send({ status: 200, message: "Ok", data })
     } catch (error) {
         return res.status(400).send(error)

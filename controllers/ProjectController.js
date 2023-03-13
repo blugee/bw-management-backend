@@ -36,7 +36,7 @@ const createNewProject = async (req, res) => {
 
 const getAllProject = async (req, res) => {
     try {
-        let data = await ProjectModel.find().populate([{ path: 'general.client', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.user', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.manager', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.viewer', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'team', model: 'User', select: ['fullName', 'username', 'avatar'] }])
+        let data = await ProjectModel.find().populate([{ path: 'general.client', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.user', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.manager', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'members.viewer', model: 'User', select: ['fullName', 'username', 'avatar'] }, { path: 'team', model: 'User', select: ['fullName', 'username', 'avatar'] }]).sort({ createdAt: -1 })
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         console.log(error);

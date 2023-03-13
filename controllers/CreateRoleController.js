@@ -26,7 +26,7 @@ const createNewRole = async (req, res) => {
 
 const getAllRole = async (req, res) => {
     try {
-        let data = await CreateRoleModel.find()
+        let data = await CreateRoleModel.find().sort({ createdAt: -1 })
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })
@@ -45,7 +45,7 @@ const getRoleById = async (req, res) => {
 const getRoleByName = async (req, res) => {
     const { role } = req.params
     try {
-        let data = await CreateRoleModel.find({ role: { $regex: new RegExp("^" + role.toLowerCase(), "i") } })
+        let data = await CreateRoleModel.find({ role: { $regex: new RegExp("^" + role.toLowerCase(), "i") } }).sort({ createdAt: -1 })
         return res.status(200).send({ status: 200, message: "OK", data })
     } catch (error) {
         res.status(400).send({ status_code: 400, message: "Error", error })
